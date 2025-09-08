@@ -1,34 +1,52 @@
-function dx = pendulo_dinamica(t, x)
+tiempo = [0 10];
+x0 = [0; 0; 0.01745; 0];
 
-Ip  = 0.0079;      
-Mc  = 0.7031;     
-lp  = 0.3302;      
-Mp  = 0.23;        
-Fc  = 0.0;         
-Beq = 4.3;         
-g   = 9.81;        
-Bp  = 0.0024;     
+[t, X] = ode45(@tarea2_hernandez_roldan, tiempo, x0);
+
+figure;
+plot(t, X(:,1), 'g'); hold on;
+plot(t, X(:,2), 'r');
+plot(t, X(:,3), 'b');
+plot(t, X(:,4), 'y');
+
+ax = gca;
+ax.Color = [0.8 0.8 0.8];
 
 
-xc     = x(1); 
-xcd    = x(2);   
-alpha  = x(3);   
-alphad = x(4);   
+xlabel('Tiempo (s)');
+ylabel('Estados');
+legend('posición carro', 'velocidad del carro','ángulo del péndulo', 'vel. angular del péndulo');
+title('Dinámica del péndulo invertido');
+grid on;
 
-A  = Mc + Mp;
-J  = Ip + Mp*lp^2;
-H  = Mp*lp*cos(alpha);
-Q1 = Fc - Beq*xcd + Mp*lp*alphad^2*sin(alpha);
-Q2 = -Bp*alphad - Mp*g*lp*sin(alpha);
 
-D = A*J - H^2;
+figure;
 
-xdd     = ( J*Q1 - H*Q2 )/D;
-alphadd = ( -H*Q1 + A*Q2 )/D;
+subplot(2,2,1)
+title('Posición 1')
+plot(t, X(:,1), 'g'); hold on;
+title('Posición del carro')
+grid on;
+ax = gca;
+ax.Color = [0.8 0.8 0.8];
 
-dx = zeros(4,1);
-dx(1) = xcd;
-dx(2) = xdd;
-dx(3) = alphad;
-dx(4) = alphadd;
-end
+subplot(2,2,2)
+plot(t, X(:,3), 'b');
+title('Ángulo del péndulo')
+grid on;
+ax = gca;
+ax.Color = [0.8 0.8 0.8];
+
+subplot(2,2,3)
+plot(t, X(:,2), 'r');
+title('Velocidad del carro')
+grid on;
+ax = gca;
+ax.Color = [0.8 0.8 0.8];
+
+subplot(2,2,4)
+plot(t, X(:,4), 'y');
+title('Velocidad angular del péndulo')
+grid on;
+ax = gca;
+ax.Color = [0.8 0.8 0.8];
